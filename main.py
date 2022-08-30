@@ -64,11 +64,11 @@ def importDataInJira():
 
 
 if __name__ == '__main__':
-    if everhourApiKey is None:
-        print("PLEASE PROVIDE YOUR API KEY FOR EVERHOUR")
+    if everhourApiKey is None or projectKey is None:
+        print("PLEASE PROVIDE YOUR API KEY AND PROJECT KEY FOR EVERHOUR")
         exit()
     downloadDataFromEverhour()
     if jiraApiKey is None or jiraEmail is None:
-        print("PLEASE PROVIDE API KEY AND EMAIL FOR JIRA")
+        print("PLEASE PROVIDE API KEY, EMAIL AND DOMAIN NAME FOR JIRA")
         exit()
     importDataInJira()
