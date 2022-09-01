@@ -36,6 +36,7 @@ def importDataInJira():
     worklogs = [worklog.split(',') for worklog in data]
     authJira = JIRA(f'https://{jiraDomainName}.atlassian.net', basic_auth=(jiraEmail, jiraApiKey))
     print(f'Importing {len(worklogs)} worklogs')
+    myAccountId = authJira.current_user()
     for worklog in worklogs:
         issue = worklog[0]
         timeSpent = int(worklog[1])
@@ -43,7 +44,8 @@ def importDataInJira():
         print(f'Adding worklog: {issue}: {timeSpent / 3600}h on {started.date()}')
         jiraWorklogs = authJira.worklogs(issue=issue)
         matchingWorklogs = list(
-            filter(lambda x: datetime.fromisoformat(x.started.split("T")[0]) == started, jiraWorklogs))
+            filter(lambda x: datetime.fromisoformat(
+                x.started.split("T")[0]) == started and x.author.accountId == myAccountId, jiraWorklogs))
         if len(matchingWorklogs) > 0:
             print('There are existing worklogs for this task on this date')
             worklogTimeSpent = 0
